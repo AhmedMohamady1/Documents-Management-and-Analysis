@@ -119,7 +119,10 @@ class Search:
             for document in documents:
                 self.__print_document_metaData(document)
                 prepared_content=self.__content_preparation(document['contents'])
-                print(f'Term Frequency of the term "{search_term}": {self.__term_frequency(search_term, prepared_content)} ({prepared_content.count(search_term.lower())}/{len(prepared_content)})')
+                if ' ' in search_term:
+                    print(f'Unable to calculate term frequency for multiple words')
+                else:
+                    print(f'Term Frequency of the term "{search_term}": {self.__term_frequency(search_term, prepared_content)} ({prepared_content.count(search_term.lower())}/{len(prepared_content)})')
                 page_numbers = self.extract_page_numbers_of_text(document, search_term)
                 print(f'Pages containing the search term "{search_term}": {", ".join(map(str, page_numbers))}')
                 print('=================================================================')
