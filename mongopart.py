@@ -2,9 +2,11 @@ from pymongo import MongoClient
 from gridfs import GridFS
 from PyPDF2 import PdfReader
 from docx import Document
-from datetime import datetime
-import win32com.client
 import os
+import datetime
+import re
+import win32com.client
+import PyPDF2
 
 client= MongoClient()
 db= client.Project
@@ -119,9 +121,58 @@ def extract_text_from_file(file_path):
     except Exception as e:
         return f"Error processing file: {e}"
 
-def count_words_in_text(text):
-    words = text.split()
-    return len(words)
+def get_word_word_count(word_data):
+    word = win32com.client.Dispatch("Word.Application")
+    word.Visible = False  
+    
+    temp_path = "temp_document.docx"
+    with open(temp_path, "wb") as temp_file:
+        temp_file.write(word_data)
+    
+    doc = word.Documents.Open(os.path.abspath(temp_path))
+
+    word_count = doc.ComputeStatistics(0)  # Use 0 to count words
+    
+    doc.Close()
+    word.Quit()
+    os.remove(temp_path)
+    
+    return word_count
+    
+def count_words_in_text(file_path,data):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"The file {file_path} does not exist.")
+    
+    file_extension = os.path.splitext(file_path)[1].lower()
+    
+    try:
+        if file_extension == '.pdf':
+            with open(file_path, 'rb') as file:
+                reader = PyPDF2.PdfReader(file)
+                text = ''
+                for page in reader.pages:
+                    text += page.extract_text()
+            
+            words = re.findall(r'\b\w+\b', text.lower())
+            return len(words)
+        
+        elif file_extension == '.docx':
+            return get_word_word_count(data)
+
+        
+        elif file_extension == '.txt':
+            with open(file_path, 'r', encoding='utf-8') as file:
+                text = file.read()
+            
+            words = re.findall(r'\b\w+\b', text.lower())
+            return len(words)
+        
+        else:
+            raise ValueError(f"Unsupported file type: {file_extension}")
+    
+    except Exception as e:
+        print(f"Error processing file {file_path}: {e}")
+        return 0
 
 def count_characters_in_text(text, include_newlines=True):
     if not include_newlines:
@@ -132,15 +183,17 @@ def Pull_File(file_path):
     text=extract_text_from_file(file_path)
     with open(file_path, "rb") as file:
         data = file.read()
+        count_page=count_pages(file_path,data)
+        count_word=count_words_in_text(file_path,data)
         document = {
             "name": file_path.split("/")[-1],
-            "contents": text,
+            "Contents": text,
             "file_data": data,
-            "pages": count_pages(file_path, data),
-            "words": count_words_in_text(text),
+            "pages": count_page,
+            "words": count_word,
             "characters": count_characters_in_text(text),
-            "modify date":datetime.fromtimestamp(os.path.getmtime(file_path)),
-            "upload date":datetime.now()
+            "modify date":datetime.datetime.fromtimestamp(os.path.getmtime(file_path)),
+            "upload date":datetime.datetime.now()
         }
         insert_file(document)
 
