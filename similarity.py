@@ -34,14 +34,15 @@ class SimilarityGetter:
 
     def euclidean_distance(self):
         return round((sqrt(sum(pow(x - y, 2) for x, y in zip(self.bow_vectors[0], self.bow_vectors[1])))), 3)
+    
+if __name__=='__main__':
+    texts = [
+        "تحيا مصر و مصر للطيران و شغل الثحث",
+        "تحيا مصر و مصر للطيران بس مش شغل الثحث"
+    ]
 
-texts = [
-    "تحيا مصر و مصر للطيران و شغل الثحث",
-    "تحيا مصر و مصر للطيران بس مش شغل الثحث"
-]
-
-similarity_test = SimilarityGetter(texts)
-print(similarity_test)
-print(similarity_test.cosine_similarity())
-print(similarity_test.jaccard_similarity())
-print(similarity_test.euclidean_distance())
+    similarity_test = SimilarityGetter(texts)
+    print(similarity_test)
+    print(similarity_test.cosine_similarity())
+    print(similarity_test.jaccard_similarity())
+    print(similarity_test.euclidean_distance())
