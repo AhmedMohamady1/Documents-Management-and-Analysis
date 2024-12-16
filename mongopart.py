@@ -174,9 +174,55 @@ def count_words_in_text(file_path,data):
         print(f"Error processing file {file_path}: {e}")
         return 0
 
-def count_characters_in_text(text, include_newlines=True):
-    if not include_newlines:
-        text = text.replace('\n', '')
+def get_character_count(word_data):
+    word = win32com.client.Dispatch("Word.Application")
+    word.Visible = False 
+    
+    temp_path = "temp_document.docx"
+    
+    with open(temp_path, "wb") as temp_file:
+        temp_file.write(word_data)
+    
+    doc = word.Documents.Open(os.path.abspath(temp_path))
+
+    char_count = doc.ComputeStatistics(5)  
+    
+    doc.Close()
+    word.Quit()
+    
+    os.remove(temp_path)
+    
+    return char_count
+
+def count_characters(file_path,data):
+    file_extension = file_path.split('.')[-1].lower()
+    
+    if file_extension == "pdf":
+        return count_characters_in_pdf(file_path)
+    elif file_extension == "docx":
+        return get_character_count(data)
+    elif file_extension == "txt":
+        return count_characters_in_txt(file_path)
+    else:
+        raise ValueError("Unsupported file format. Only PDF, DOCX, and TXT are supported.")
+
+def count_characters_in_pdf(file_path):
+    reader = PdfReader(file_path)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() or ""  
+    return len(text)
+
+def count_characters_in_docx(file_path):
+    doc = Document(file_path)
+    text = ""
+    for paragraph in doc.paragraphs:
+        text += paragraph.text
+    return len(text)
+
+def count_characters_in_txt(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        text = file.read()
     return len(text)
 
 def Pull_File(file_path):
@@ -185,13 +231,14 @@ def Pull_File(file_path):
         data = file.read()
         count_page=count_pages(file_path,data)
         count_word=count_words_in_text(file_path,data)
+        count_character=count_characters(file_path,data)
         document = {
             "name": file_path.split("/")[-1],
             "Contents": text,
             "file_data": data,
             "pages": count_page,
             "words": count_word,
-            "characters": count_characters_in_text(text),
+            "characters": count_character,
             "modify date":datetime.datetime.fromtimestamp(os.path.getmtime(file_path)),
             "upload date":datetime.datetime.now()
         }
