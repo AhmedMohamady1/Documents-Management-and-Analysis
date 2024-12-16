@@ -6,7 +6,6 @@ class Application:
     def __init__(self):
         self.__search=Search()
         self.__mongo=Mongo()
-        self.__similarity=SimilarityGetter()
         
     def help(self):
         print("1 import file")
@@ -62,8 +61,11 @@ class Application:
             
     def similarity(self, choice: str):
         print("Please insert the two files names:")
-        name1 = input()
-        name2 = input()
+        name1 = input("File1: ")
+        name2 = input("File2: ")
+        texts = [self.__search.search_file(name1, "name"), self.__search.search_file(name2, "name")]
+        comparison = SimilarityGetter(texts)
+        print("Choose the comparison metric:")
         print("1 Cosine similarity")
         print("2 Jaccard similarity")
         print("3 Euclidean distance (dissimilarity)")
@@ -73,13 +75,13 @@ class Application:
                 case "0":
                     return
                 case "1":
-                    return f"The Cosine similarity is: {self.similarity.cosine}"
+                    return f"The Cosine similarity is: {comparison.cosine_similarity()}"
                 case "2":
-                    
+                    return f"The Jaccard similarity is: {comparison.jaccard_similarity()}"
                 case "3":
-                    
+                    return f"The Euclidean distance is: {comparison.euclidean_distance()}"
                 case "4":
-                    
+                    return comparison
                 case _:
                     return "invalid input"
         
