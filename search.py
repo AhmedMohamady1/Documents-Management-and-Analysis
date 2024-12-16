@@ -12,7 +12,7 @@ class Search:
     def __init__(self, mongodb_driver):
         self.__mongodb_driver=mongodb_driver
 
-    def __db_query(self, search_terms, attributes='contents'):
+    def db_query(self, search_terms, attributes='contents'):
         # Ensure attributes are valid
         valid_attributes = ['name', 'contents', 'modify date', 'upload date']
         
@@ -135,7 +135,7 @@ class Search:
 
     def search_file(self, search_term: str, attribute: str):
         try:
-            documents = list(self.__db_query(search_term, attribute))
+            documents = list(self.db_query(search_term, attribute))
             if len(documents)==0:
                 print('Document not found.')
                 return
@@ -148,7 +148,7 @@ class Search:
 
     def search_contents(self, search_term):
         try:
-            documents = list(self.__db_query(search_term))
+            documents = list(self.db_query(search_term))
             if len(documents)==0:
                 print('Document not found.')
                 return

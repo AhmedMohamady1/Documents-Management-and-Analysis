@@ -236,7 +236,7 @@ class Mongo:
             count_character=self.count_characters(file_path,data)
             document = {
                 "name": file_path.split("/")[-1],
-                "Contents": text,
+                "contents": text,
                 "file_data": data,
                 "pages": count_page,
                 "words": count_word,

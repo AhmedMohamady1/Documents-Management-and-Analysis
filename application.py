@@ -4,8 +4,8 @@ from similarity import *
 
 class Application:
     def __init__(self):
-        self.__search=Search()
         self.__mongo=Mongo()
+        self.__search=Search(self.__mongo.collection)
         
     def help(self):
         print("1 import file")
@@ -59,31 +59,35 @@ class Application:
         self.__search.search_file([search_term1,search_term2], [attribute1, attribute2])
             
             
-    def similarity(self, choice: str):
+    def similarity(self):
         print("Please insert the two files names:")
         name1 = input("File1: ")
         name2 = input("File2: ")
-        texts = [self.__search.search_file(name1, "name"), self.__search.search_file(name2, "name")]
-        comparison = SimilarityGetter(texts)
-        print("Choose the comparison metric:")
+        texts = [list(self.__search.db_query(name1, "name"))[0]['contents'],list(self.__search.db_query(name2, "name"))[0]['contents']]
+        
+        print("\nChoose the comparison metric:")
         print("1 Cosine similarity")
         print("2 Jaccard similarity")
         print("3 Euclidean distance (dissimilarity)")
         print("4 View words counts")
         print("0 Back")
+        
+        choice=input('Choice: ')
+        comparison = SimilarityGetter(texts)
+        
         match choice:
-                case "0":
-                    return
-                case "1":
-                    return f"The Cosine similarity is: {comparison.cosine_similarity()}"
-                case "2":
-                    return f"The Jaccard similarity is: {comparison.jaccard_similarity()}"
-                case "3":
-                    return f"The Euclidean distance is: {comparison.euclidean_distance()}"
-                case "4":
-                    return comparison
-                case _:
-                    return "invalid input"
+            case "0":
+                return
+            case "1":
+                return f"\nThe Cosine similarity is: {comparison.cosine_similarity()}"
+            case "2":
+                return f"\nThe Jaccard similarity is: {comparison.jaccard_similarity()}"
+            case "3":
+                return f"\nThe Euclidean distance is: {comparison.euclidean_distance()}"
+            case "4":
+                return comparison
+            case _:
+                return "\ninvalid input"
         
     def execute(self):
         self.help()
@@ -100,8 +104,11 @@ class Application:
                 case "3":
                     self.search_file()
                 case "4":
-                    self.search_contents()
+                    self.combination_search()
                 case "5":
-                    self.similarity()
+                    print(self.similarity())
                 case _:
                     self.help()
+
+application=Application()
+application.execute()
