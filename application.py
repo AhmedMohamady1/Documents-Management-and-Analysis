@@ -63,7 +63,8 @@ class Application:
         print("Please insert the two files names:")
         name1 = input("File1: ")
         name2 = input("File2: ")
-        texts = [list(self.__search.db_query(name1, "name"))[0]['contents'],list(self.__search.db_query(name2, "name"))[0]['contents']]
+        texts = [list(self.__search.db_query(name1, "name"))[0]["contents"],list(self.__search.db_query(name2, "name"))[0]["contents"]]
+        comparison = SimilarityGetter(texts)
         
         print("\nChoose the comparison metric:")
         print("1 Cosine similarity")
@@ -71,9 +72,7 @@ class Application:
         print("3 Euclidean distance (dissimilarity)")
         print("4 View words counts")
         print("0 Back")
-        
-        choice=input('Choice: ')
-        comparison = SimilarityGetter(texts)
+        choice = input("Choice: ")
         
         match choice:
             case "0":
