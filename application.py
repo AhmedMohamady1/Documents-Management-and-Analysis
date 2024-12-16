@@ -70,7 +70,6 @@ class Application:
         print("1 Cosine similarity")
         print("2 Jaccard similarity")
         print("3 Euclidean distance (dissimilarity)")
-        print("4 View words counts")
         print("0 Back")
         choice = input("Choice: ")
         
@@ -83,8 +82,6 @@ class Application:
                 return f"\nThe Jaccard similarity is: {comparison.jaccard_similarity()}"
             case "3":
                 return f"\nThe Euclidean distance is: {comparison.euclidean_distance()}"
-            case "4":
-                return comparison
             case _:
                 return "\ninvalid input"
         
