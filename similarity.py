@@ -1,6 +1,5 @@
 from collections import Counter
 from math import*
-import pandas as pd
 
 class SimilarityGetter:
 
@@ -12,10 +11,6 @@ class SimilarityGetter:
             word_count = Counter(text)
             vector = [word_count.get(word, 0) for word in self.vocabulary]
             self.bow_vectors.append(vector)
-
-    def __str__(self):
-        df = pd.DataFrame(self.bow_vectors, columns = list(self.vocabulary), index = [f"File {i + 1}" for i in range(len(self.bow_vectors))])
-        return df.to_string()
 
     def square_rooted(self, vector):
         return round(sqrt(sum([x * x for x in vector])), 3)
@@ -34,15 +29,13 @@ class SimilarityGetter:
 
     def euclidean_distance(self):
         return round((sqrt(sum(pow(x - y, 2) for x, y in zip(self.bow_vectors[0], self.bow_vectors[1])))), 3)
-    
-if __name__=='__main__':
-    texts = [
-        "تحيا مصر و مصر للطيران و شغل الثحث",
-        "تحيا مصر و مصر للطيران بس مش شغل الثحث"
-    ]
 
-    similarity_test = SimilarityGetter(texts)
-    print(similarity_test)
-    print(similarity_test.cosine_similarity())
-    print(similarity_test.jaccard_similarity())
-    print(similarity_test.euclidean_distance())
+texts = [
+    "The greenhouse controls temperature and humidity levels automatically Sensors measure soil moisture air quality and light intensity precisely",
+    "Humidity and temperature impact soil conditions Greenhouse sensors monitor light air quality and moisture for efficient plant growth"
+]
+
+similarity_test = SimilarityGetter(texts)
+print(similarity_test.cosine_similarity())
+print(similarity_test.jaccard_similarity())
+print(similarity_test.euclidean_distance())
