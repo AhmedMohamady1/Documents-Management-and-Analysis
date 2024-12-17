@@ -23,7 +23,7 @@ class Application:
         name=input('file name: ')
         self.__mongo.delete_file(name)
     
-    def __search_helper():
+    def __search_helper(self):
         print("Choose the search attribute")
         print("1 name")
         print("2 modify date")
@@ -105,6 +105,7 @@ class Application:
                     print(self.similarity())
                 case _:
                     self.help()
+            print("")
 
 application=Application()
 application.execute()
