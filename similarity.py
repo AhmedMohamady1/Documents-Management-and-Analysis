@@ -30,12 +30,13 @@ class SimilarityGetter:
     def euclidean_distance(self):
         return round((sqrt(sum(pow(x - y, 2) for x, y in zip(self.bow_vectors[0], self.bow_vectors[1])))), 3)
 
-texts = [
-    "The greenhouse controls temperature and humidity levels automatically Sensors measure soil moisture air quality and light intensity precisely",
-    "Humidity and temperature impact soil conditions Greenhouse sensors monitor light air quality and moisture for efficient plant growth"
-]
+if __name__=='__main__':
+    texts = [
+        "The greenhouse controls temperature and humidity levels automatically Sensors measure soil moisture air quality and light intensity precisely",
+        "Humidity and temperature impact soil conditions Greenhouse sensors monitor light air quality and moisture for efficient plant growth"
+    ]
 
-similarity_test = SimilarityGetter(texts)
-print(similarity_test.cosine_similarity())
-print(similarity_test.jaccard_similarity())
-print(similarity_test.euclidean_distance())
+    similarity_test = SimilarityGetter(texts)
+    print(similarity_test.cosine_similarity())
+    print(similarity_test.jaccard_similarity())
+    print(similarity_test.euclidean_distance())
