@@ -55,8 +55,14 @@ class Search:
 
     
     def __print_document_metaData(self, document):
-        print(f'Name: {document['name'].split('.')[0]}\nType: {document['name'].split('.')[-1]}\nNo. of Pages: {document['pages']}\nNo. of Words: {document['words']}\nNo. of Characters: {document['characters']}\nDate Uploaded: {str(document['upload date']).split('.')[0]}\nDate Modified: {str(document['modify date']).split('.')[0]}')
-            
+        print(f"Name: {document['name'].split('.')[0]}\n"
+        f"Type: {document['name'].split('.')[-1]}\n"
+        f"No. of Pages: {document['pages']}\n"
+        f"No. of Words: {document['words']}\n"
+        f"No. of Characters: {document['characters']}\n"
+        f"Date Uploaded: {str(document['upload date']).split('.')[0]}\n"
+        f"Date Modified: {str(document['modify date']).split('.')[0]}")
+                    
     def __most_common_words(self, words_list: list, n=5):
         word_counts = Counter(words_list)
         

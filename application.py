@@ -54,9 +54,10 @@ class Application:
     
     def combination_search(self):
         attribute1=self.__search_helper()
-        attribute2=self.__search_helper()
         search_term1=input('search term: ')
+        attribute2=self.__search_helper()
         search_term2=input('search term: ')
+        print('')
         self.__search.search_file([search_term1,search_term2], [attribute1, attribute2])
             
             
