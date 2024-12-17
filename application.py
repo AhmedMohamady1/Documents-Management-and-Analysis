@@ -16,7 +16,7 @@ class Application:
         print("0 exit")
     
     def import_file(self):
-        path=input('file path: ')
+        path=input('file path (please include "r" in the beginning): ')
         self.__mongo.Pull_File(path)  
 
     def delete_file(self):
