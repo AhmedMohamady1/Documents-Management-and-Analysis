@@ -4,8 +4,8 @@ from similarity import *
 
 class Application:
     def __init__(self):
-        self.__mongo=Mongo()
-        self.__search=Search(self.__mongo.collection)
+        self.__mongo = Mongo()
+        self.__search = Search(self.__mongo.collection)
         
     def help(self):
         print("1 import file")
@@ -16,12 +16,20 @@ class Application:
         print("0 exit")
     
     def import_file(self):
-        path=input('file path: ')
-        self.__mongo.Pull_File(path)  
+        try:
+            path = input('file path: ')
+            self.__mongo.Pull_File(path)
+            print(f"File '{path}' successfully imported.")
+        except Exception as e:
+            print(f"Error importing file: {e}")
 
     def delete_file(self):
-        name=input('file name: ')
-        self.__mongo.delete_file(name)
+        try:
+            name = input('file name: ')
+            self.__mongo.delete_file(name)
+            print(f"File '{name}' successfully deleted.")
+        except Exception as e:
+            print(f"Error deleting file: {e}")
     
     def __search_helper(self):
         print("Choose the search attribute")
@@ -31,7 +39,7 @@ class Application:
         print("4 contents")
 
         while True:
-            attribute=input('attribute: ')
+            attribute = input('attribute: ')
             match attribute:
                 case '1':
                     return 'name'
@@ -45,30 +53,46 @@ class Application:
                     print('invalid input')
             
     def search_file(self):
-        attribute=self.__search_helper()
-        search_term=input('search term: ')
+        attribute = self.__search_helper()
+        search_term = input('search term: ')
         print('\nFiles Found:\n')
-        if attribute=='contents':
-            self.__search.search_contents(search_term)
+        if attribute == 'contents':
+            results = self.__search.search_contents(search_term)
         else:
-            self.__search.search_file(search_term, attribute)
-    
+            results = self.__search.search_file(search_term, attribute)
+
+        if not results:
+            print("No files found matching the criteria.")
+
     def combination_search(self):
-        n=int(input('Number of conditions: '))
-        attributes=[]
-        search_terms=[]
-        for i in range(n):
-            attributes.append(self.__search_helper())
-            search_terms.append(input('search term: '))
-        print('')
-        self.__search.search_file(search_terms, attributes)
-            
-            
+        try:
+            n = int(input('Number of conditions: '))
+            attributes = []
+            search_terms = []
+            for i in range(n):
+                attributes.append(self.__search_helper())
+                search_terms.append(input('search term: '))
+            print('')
+            results = self.__search.search_file(search_terms, attributes)
+
+            if not results:
+                print("No files found matching the criteria.")
+        except Exception as e:
+            print(f"Error during combination search: {e}")
+        
     def similarity(self):
         print("Please insert the two files names:")
         name1 = input("File1: ")
         name2 = input("File2: ")
-        texts = [list(self.__search.db_query(name1, "name"))[0]["contents"],list(self.__search.db_query(name2, "name"))[0]["contents"]]
+        try:
+            texts = [
+                list(self.__search.db_query(name1, "name"))[0]["contents"],
+                list(self.__search.db_query(name2, "name"))[0]["contents"]
+            ]
+        except IndexError:
+            print("One or both files were not found.")
+            return
+        
         comparison = SimilarityGetter(texts)
         
         print("\nChoose the comparison metric:")
@@ -114,8 +138,8 @@ class Application:
                 case "5":
                     self.similarity()
                 case _:
-                    pass
+                    print("Invalid command. Please try again.")
             print("")
 
-application=Application()
+application = Application()
 application.execute()
