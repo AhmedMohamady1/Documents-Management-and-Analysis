@@ -29,36 +29,39 @@ class Application:
         print("2 modify date")
         print("3 upload date")
         print("4 contents")
-        print("0 exit")
-        attribute=input('attribute: ')
-        match attribute:
-            case '1':
-                return 'name'
-            case '2':
-                return 'modify date'
-            case '3':
-                return 'upload date'
-            case '4':
-                return 'contents'
-            case '0':
-                return
+
+        while True:
+            attribute=input('attribute: ')
+            match attribute:
+                case '1':
+                    return 'name'
+                case '2':
+                    return 'modify date'
+                case '3':
+                    return 'upload date'
+                case '4':
+                    return 'contents'
+                case _:
+                    print('invalid input')
             
     def search_file(self):
         attribute=self.__search_helper()
         search_term=input('search term: ')
-        print('')
+        print('\nFiles Found:\n')
         if attribute=='contents':
             self.__search.search_contents(search_term)
         else:
             self.__search.search_file(search_term, attribute)
     
     def combination_search(self):
-        attribute1=self.__search_helper()
-        search_term1=input('search term: ')
-        attribute2=self.__search_helper()
-        search_term2=input('search term: ')
+        n=int(input('Number of conditions: '))
+        attributes=[]
+        search_terms=[]
+        for i in range(n):
+            attributes.append(self.__search_helper())
+            search_terms.append(input('search term: '))
         print('')
-        self.__search.search_file([search_term1,search_term2], [attribute1, attribute2])
+        self.__search.search_file(search_terms, attributes)
             
             
     def similarity(self):
@@ -73,20 +76,25 @@ class Application:
         print("2 Jaccard similarity")
         print("3 Euclidean distance (dissimilarity)")
         print("0 Back")
-        choice = input("Choice: ")
-        
-        match choice:
-            case "0":
-                return
-            case "1":
-                return f"\nThe Cosine similarity is: {comparison.cosine_similarity()}"
-            case "2":
-                return f"\nThe Jaccard similarity is: {comparison.jaccard_similarity()}"
-            case "3":
-                return f"\nThe Euclidean distance is: {comparison.euclidean_distance()}"
-            case _:
-                return "\ninvalid input"
-        
+        print('')
+        while True:
+            choice = input("Choice: ")
+            match choice:
+                case "0":
+                    print("Exiting...")
+                    break
+                case "1":
+                    print(f"The Cosine similarity is: {comparison.cosine_similarity()}")
+                    break
+                case "2":
+                    print(f"The Jaccard similarity is: {comparison.jaccard_similarity()}")
+                    break
+                case "3":
+                    print(f"The Euclidean distance is: {comparison.euclidean_distance()}")
+                    break
+                case _:
+                    print("Invalid input")
+
     def execute(self):
         while True:
             self.help()
@@ -104,9 +112,9 @@ class Application:
                 case "4":
                     self.combination_search()
                 case "5":
-                    print(self.similarity())
+                    self.similarity()
                 case _:
-                    self.help()
+                    pass
             print("")
 
 application=Application()

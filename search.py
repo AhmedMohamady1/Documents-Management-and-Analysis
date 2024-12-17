@@ -21,10 +21,9 @@ class Search:
             search_terms = [search_terms]
         if isinstance(attributes, str):
             attributes = [attributes]
-
+            
         if not all(attr in valid_attributes for attr in attributes):
             return
-
         # Initialize the query
         search_queries = []
         for i in range(len(attributes)):
@@ -44,12 +43,10 @@ class Search:
             else:
                 # Add regex queries for text attributes
                 search_queries.append({attributes[i]: {"$regex": search_terms[i], "$options": "i"}})
-
         # Combine queries with $or to match any condition
         combined_query = {"$and": search_queries}
         # Define the projection
         projection = {'_id': 0}
-
         # Perform the query
         return self.__mongodb_driver.find(combined_query, projection)
 
@@ -142,7 +139,7 @@ class Search:
     def search_file(self, search_term: str, attribute: str):
         try:
             documents = list(self.db_query(search_term, attribute))
-            if len(documents)==0:
+            if documents is None or len(documents)==0:
                 print('Document not found.')
                 return
             for document in documents:
@@ -174,3 +171,4 @@ class Search:
                 print('=================================================================')
         except Exception as e:
             print('Query error:',e)
+            
