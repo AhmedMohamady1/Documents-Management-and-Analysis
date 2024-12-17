@@ -46,6 +46,7 @@ class Application:
     def search_file(self):
         attribute=self.__search_helper()
         search_term=input('search term: ')
+        print('')
         if attribute=='contents':
             self.__search.search_contents(search_term)
         else:
