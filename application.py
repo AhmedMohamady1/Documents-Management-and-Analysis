@@ -63,17 +63,15 @@ class Application:
         print("Please insert the two files names:")
         name1 = input("File1: ")
         name2 = input("File2: ")
-        texts = [list(self.__search.db_query(name1, "name"))[0]['contents'],list(self.__search.db_query(name2, "name"))[0]['contents']]
+        texts = [list(self.__search.db_query(name1, "name"))[0]["contents"],list(self.__search.db_query(name2, "name"))[0]["contents"]]
+        comparison = SimilarityGetter(texts)
         
         print("\nChoose the comparison metric:")
         print("1 Cosine similarity")
         print("2 Jaccard similarity")
         print("3 Euclidean distance (dissimilarity)")
-        print("4 View words counts")
         print("0 Back")
-        
-        choice=input('Choice: ')
-        comparison = SimilarityGetter(texts)
+        choice = input("Choice: ")
         
         match choice:
             case "0":
@@ -84,8 +82,6 @@ class Application:
                 return f"\nThe Jaccard similarity is: {comparison.jaccard_similarity()}"
             case "3":
                 return f"\nThe Euclidean distance is: {comparison.euclidean_distance()}"
-            case "4":
-                return comparison
             case _:
                 return "\ninvalid input"
         
