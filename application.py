@@ -16,7 +16,7 @@ class Application:
         print("0 exit")
     
     def import_file(self):
-        path=input('file path (please include "r" in the beginning): ')
+        path=input('file path: ')
         self.__mongo.Pull_File(path)  
 
     def delete_file(self):
@@ -86,8 +86,8 @@ class Application:
                 return "\ninvalid input"
         
     def execute(self):
-        self.help()
         while True:
+            self.help()
             print("")
             command = input("command: ")
             match command:
