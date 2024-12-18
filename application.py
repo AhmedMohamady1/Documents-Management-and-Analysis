@@ -30,7 +30,7 @@ class Application:
             print(f"Error deleting file: {e}")
     
     def __search_helper(self):
-        print("Choose the search attribute")
+        print("choose the search attribute")
         print("1 name")
         print("2 modify date (in yyyy-mm-dd)")
         print("3 upload date (in yyyy-mm-dd)")
@@ -53,13 +53,10 @@ class Application:
     def search_file(self):
         attribute = self.__search_helper()
         search_term = input('search term: ')
-        print('\nFiles Found:\n')
         if attribute == 'contents':
             self.__search.search_contents(search_term)
-            return
         else:
             self.__search.search_file(search_term, attribute)
-            return
 
     def combination_search(self):
         try:
@@ -136,5 +133,6 @@ class Application:
                     print("Invalid command. Please try again.")
             print("")
 
-application = Application()
-application.execute()
+if __name__=='__main__':
+    application = Application()
+    application.execute()

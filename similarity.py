@@ -19,7 +19,7 @@ class SimilarityGetter:
         numerator = sum(x * y for x, y in zip(self.bow_vectors[0], self.bow_vectors[1]))
         denominator = self.square_rooted(self.bow_vectors[0]) * self.square_rooted(self.bow_vectors[1])
         return round(numerator/float(denominator), 3)
-
+    
     def jaccard_similarity(self):
         set1 = set(i for i, v in enumerate(self.bow_vectors[0]) if v > 0)
         set2 = set(i for i, v in enumerate(self.bow_vectors[1]) if v > 0)

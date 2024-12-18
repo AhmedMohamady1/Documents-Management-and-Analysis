@@ -142,6 +142,7 @@ class Search:
             if len(documents)==0:
                 print('Document not found.')
                 return
+            print('\nFiles Found:\n')
             for document in documents:
                 self.__print_document_metaData(document)
                 self.__most_common_words(self.__remove_unnecessary_words(document['contents']))
