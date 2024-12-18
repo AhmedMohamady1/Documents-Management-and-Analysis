@@ -145,7 +145,7 @@ class Search:
             print('\nFiles Found:\n')
             for document in documents:
                 self.__print_document_metaData(document)
-                self.__most_common_words(self.__remove_unnecessary_words(document['contents']))
+                self.__most_common_words(self.__content_preparation(document['contents']))
                 print('=================================================================')
         except Exception as e:
             print('Query error:',e)
@@ -156,7 +156,7 @@ class Search:
             if len(documents)==0:
                 print('Document not found.')
                 return
-            print(f'Documents that contain "{search_term}"')
+            print(f'\nDocuments that contain "{search_term}\n"')
             for document in documents:
                 self.__print_document_metaData(document)
                 prepared_content=self.__content_preparation(document['contents'])
@@ -168,7 +168,7 @@ class Search:
 
                 if document['name'].split('.')[-1] != 'txt':                
                     page_numbers = self.__extract_page_numbers_of_document(document, search_term)
-                    print(f'Pages containing the search term "{search_term}": {", ".join(map(str, page_numbers))}')
+                    print(f'Pages containing "{search_term}": {", ".join(map(str, page_numbers))}')
                 print('=================================================================')
         except Exception as e:
             print('Query error:',e)
