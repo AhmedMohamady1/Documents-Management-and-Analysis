@@ -229,7 +229,7 @@ class Mongo:
 
     def Pull_File(self,file_path):
         text=self.extract_text_from_file(file_path)
-        with open(fr"{file_path}", "rb") as file:
+        with open(f"{file_path}", "rb") as file:
             data = file.read()
             count_page=self.count_pages(file_path,data)
             count_word=self.count_words_in_text(file_path,data)

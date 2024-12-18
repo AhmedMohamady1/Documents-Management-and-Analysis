@@ -19,7 +19,6 @@ class Application:
         try:
             path = input('file path: ')
             self.__mongo.Pull_File(path)
-            print(f"File '{path}' successfully imported.")
         except Exception as e:
             print(f"Error importing file: {e}")
 
@@ -27,15 +26,14 @@ class Application:
         try:
             name = input('file name: ')
             self.__mongo.delete_file(name)
-            print(f"File '{name}' successfully deleted.")
         except Exception as e:
             print(f"Error deleting file: {e}")
     
     def __search_helper(self):
         print("Choose the search attribute")
         print("1 name")
-        print("2 modify date")
-        print("3 upload date")
+        print("2 modify date (in yyyy-mm-dd)")
+        print("3 upload date (in yyyy-mm-dd)")
         print("4 contents")
 
         while True:
@@ -57,26 +55,23 @@ class Application:
         search_term = input('search term: ')
         print('\nFiles Found:\n')
         if attribute == 'contents':
-            results = self.__search.search_contents(search_term)
+            self.__search.search_contents(search_term)
+            return
         else:
-            results = self.__search.search_file(search_term, attribute)
-
-        if not results:
-            print("No files found matching the criteria.")
+            self.__search.search_file(search_term, attribute)
+            return
 
     def combination_search(self):
         try:
-            n = int(input('Number of conditions: '))
+            n = int(input('number of conditions: '))
             attributes = []
             search_terms = []
             for i in range(n):
                 attributes.append(self.__search_helper())
                 search_terms.append(input('search term: '))
             print('')
-            results = self.__search.search_file(search_terms, attributes)
-
-            if not results:
-                print("No files found matching the criteria.")
+            self.__search.search_file(search_terms, attributes)
+            
         except Exception as e:
             print(f"Error during combination search: {e}")
         

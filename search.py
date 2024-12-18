@@ -43,7 +43,7 @@ class Search:
             else:
                 # Add regex queries for text attributes
                 search_queries.append({attributes[i]: {"$regex": search_terms[i], "$options": "i"}})
-        # Combine queries with $or to match any condition
+        # Combine queries with $and to match any condition
         combined_query = {"$and": search_queries}
         # Define the projection
         projection = {'_id': 0}
@@ -87,7 +87,7 @@ class Search:
         if word.lower() not in stop_words and re.sub(r'[^a-zA-Z]', '', word) and len(re.sub(r'[^a-zA-Z]', '', word)) > 1
     ]
         return filtered_words
-        
+    
     def __extract_page_numbers_of_pdf(self, document: dict, search_term: str):
         pdf_data = document['file_data']
         pdf_file = fitz.open(stream=pdf_data, filetype="pdf")
@@ -139,7 +139,7 @@ class Search:
     def search_file(self, search_term: str, attribute: str):
         try:
             documents = list(self.db_query(search_term, attribute))
-            if documents is None or len(documents)==0:
+            if len(documents)==0:
                 print('Document not found.')
                 return
             for document in documents:
